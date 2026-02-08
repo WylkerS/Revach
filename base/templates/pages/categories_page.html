@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Categorias | Revach{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+    <div class="md:flex md:items-center md:justify-between mb-8">
+        <div class="flex-1 min-w-0">
+            <h2 class="text-3xl font-serif font-bold text-slate-900 leading-tight">
+                Categorias
+            </h2>
+            <p class="mt-1 text-sm text-slate-500">
+                Organize suas finanças agrupando transações.
+            </p>
+        </div>
+        <div class="mt-4 flex md:mt-0 md:ml-4">
+            <button class="inline-flex items-center px-6 py-3 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 transition duration-200">
+                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Nova Categoria
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Total</span>
+            <p class="text-2xl font-serif font-bold text-slate-800">{{ categorias|length }}</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Despesas</span>
+            <p class="text-2xl font-serif font-bold text-rose-600">8</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Receitas</span>
+            <p class="text-2xl font-serif font-bold text-emerald-600">4</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        {% for categoria in categorias %}
+        <div class="group bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition duration-300 relative overflow-hidden">
+            
+            <div class="absolute left-0 top-0 bottom-0 w-1 {% if categoria.tipo == 'receita' %}bg-emerald-500{% else %}bg-rose-500{% endif %}"></div>
+
+            <div class="p-6">
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center {% if categoria.tipo == 'receita' %}bg-emerald-50 text-emerald-600{% else %}bg-rose-50 text-rose-600{% endif %}">
+                            {% if categoria.icone == 'home' %}
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                            {% elif categoria.icone == 'food' %}
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                            {% else %}
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" /></svg>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">{{ categoria.nome }}</h3>
+                            <span class="text-xs font-medium uppercase tracking-wider {% if categoria.tipo == 'receita' %}text-emerald-600{% else %}text-rose-600{% endif %}">
+                                {{ categoria.tipo }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <button class="text-slate-400 hover:text-slate-600 p-1">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                {% if categoria.tipo == 'despesa' %}
+                <div class="mt-6">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="text-slate-500">Gasto: <strong>R$ {{ categoria.gasto }}</strong></span>
+                        <span class="text-slate-400">Limite: R$ {{ categoria.limite }}</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-2">
+                        <div class="{% if categoria.porcentagem > 90 %}bg-rose-500{% else %}bg-slate-900{% endif %} h-2 rounded-full" style="width: {{ categoria.porcentagem }}%"></div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="mt-6">
+                     <p class="text-xs text-slate-500">Total recebido este mês</p>
+                     <p class="text-xl font-bold text-emerald-600">R$ {{ categoria.gasto }}</p>
+                </div>
+                {% endif %}
+
+                <div class="mt-6 flex gap-3 border-t border-gray-100 pt-4 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition duration-300">
+                    <button class="flex-1 text-xs font-bold text-slate-700 bg-gray-50 hover:bg-gray-100 py-2 rounded border border-gray-200">
+                        EDITAR
+                    </button>
+                    <button class="flex-1 text-xs font-bold text-rose-600 bg-white hover:bg-rose-50 py-2 rounded border border-rose-100">
+                        EXCLUIR
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-3 text-center py-12 bg-white rounded-lg border border-dashed border-gray-300">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhuma categoria</h3>
+            <p class="mt-1 text-sm text-gray-500">Comece criando uma nova categoria para organizar.</p>
+        </div>
+        {% endfor %}
+
+        <button class="flex flex-col items-center justify-center p-6 rounded-lg border-2 border-dashed border-gray-300 hover:border-slate-400 hover:bg-gray-50 transition text-slate-500 group">
+            <div class="w-12 h-12 rounded-full bg-gray-100 group-hover:bg-white flex items-center justify-center mb-2 transition">
+                <svg class="w-6 h-6 text-slate-400 group-hover:text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+            </div>
+            <span class="font-bold text-sm">Criar Nova Categoria</span>
+        </button>
+
+    </div>
+</div>
+{% endblock %}

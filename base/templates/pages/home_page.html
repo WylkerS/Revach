@@ -1,7 +1,136 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Dashboard | Revach{% endblock %}
 
 {% block content %}
-    <h1>REVACH</h1>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div class="flex justify-between items-end mb-8">
+        <div>
+            <h2 class="text-3xl font-serif font-bold text-slate-900">Visão Geral</h2>
+            <p class="text-slate-500 mt-1">Acompanhe a saúde financeira do seu negócio.</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 flex items-center gap-2 shadow-sm cursor-pointer hover:border-gray-300">
+            <span>Este Mês</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        
+        <div class="bg-slate-900 text-white p-8 rounded-lg shadow-lg flex flex-col justify-between relative overflow-hidden h-64">
+            <div class="absolute top-0 right-0 -mr-6 -mt-6 w-32 h-32 rounded-full bg-white opacity-5 blur-xl"></div>
+            
+            <div>
+                <p class="text-slate-400 text-xs uppercase tracking-widest font-semibold mb-1">Saldo Consolidado</p>
+                <p class="text-4xl font-serif font-bold text-white">R$ {{ saldo_total|default:"50.000,00" }}</p>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-slate-800 flex justify-between items-end">
+                <div>
+                    <span class="text-emerald-400 text-sm font-medium flex items-center gap-1">
+                        ↑ 12% <span class="text-slate-500 font-normal">vs mês anterior</span>
+                    </span>
+                </div>
+                <button class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold px-3 py-2 rounded transition">
+                    + NOVA RECEITA
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-center h-64">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="p-2 bg-emerald-50 rounded-md">
+                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path></svg>
+                </div>
+                <span class="text-slate-500 font-medium text-sm">Entradas</span>
+            </div>
+            <p class="text-3xl font-bold text-slate-800 mt-2">R$ {{ total_entradas|default:"15.400,00" }}</p>
+            <div class="w-full bg-gray-100 h-1.5 rounded-full mt-6">
+                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 70%"></div>
+            </div>
+            <p class="text-xs text-slate-400 mt-2 text-right">70% da meta atingida</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100 flex flex-col justify-center h-64">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="p-2 bg-rose-50 rounded-md">
+                    <svg class="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path></svg>
+                </div>
+                <span class="text-slate-500 font-medium text-sm">Saídas</span>
+            </div>
+            <p class="text-3xl font-bold text-slate-800 mt-2">R$ {{ total_saidas|default:"4.200,00" }}</p>
+            <div class="w-full bg-gray-100 h-1.5 rounded-full mt-6">
+                <div class="bg-rose-500 h-1.5 rounded-full" style="width: 35%"></div>
+            </div>
+            <p class="text-xs text-slate-400 mt-2 text-right">35% do orçamento</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2 bg-white p-6 rounded-lg border border-gray-100 shadow-sm">
+            <h3 class="text-lg font-serif font-bold text-slate-800 mb-6">Fluxo Financeiro</h3>
+            <div class="h-72">
+                <canvas id="financeChart"></canvas>
+            </div>
+        </div>
+
+        <div class="lg:col-span-1 bg-white p-6 rounded-lg border border-gray-100 shadow-sm">
+            <h3 class="text-lg font-serif font-bold text-slate-800 mb-4">Minhas Contas</h3>
+            <div class="space-y-4">
+                {% for conta in contas %}
+                <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-md transition border border-transparent hover:border-gray-100 cursor-pointer">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-600">
+                            {{ conta.nome|slice:":2"|upper }}
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">{{ conta.nome }}</p>
+                            <p class="text-xs text-slate-500">{{ conta.tipo }}</p>
+                        </div>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700">R$ {{ conta.saldo }}</span>
+                </div>
+                {% empty %}
+                <div class="flex items-center justify-between p-3 border-b border-gray-50">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-bold">NU</div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">Nubank</p>
+                            <p class="text-xs text-slate-500">Corrente</p>
+                        </div>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700">R$ 12.450,00</span>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <button class="w-full mt-6 py-2 border border-dashed border-gray-300 text-slate-500 text-sm font-medium rounded hover:bg-gray-50 hover:border-gray-400 transition">
+                + Adicionar Conta
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const ctx = document.getElementById('financeChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+            datasets: [
+                { label: 'Entradas', data: [12000, 19000, 15000, 18000, 22000, 24000], backgroundColor: '#10b981', borderRadius: 4 },
+                { label: 'Saídas', data: [8000, 12000, 10000, 11000, 13000, 15000], backgroundColor: '#f43f5e', borderRadius: 4 }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } },
+            scales: { y: { grid: { color: '#f3f4f6' }, beginAtZero: true }, x: { grid: { display: false } } }
+        }
+    });
+</script>
 {% endblock %}
