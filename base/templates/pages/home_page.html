@@ -10,10 +10,8 @@
             <h2 class="text-3xl font-serif font-bold text-slate-900">Visão Geral</h2>
             <p class="text-slate-500 mt-1">Acompanhe a saúde financeira do seu negócio.</p>
         </div>
-        <div class="bg-white border border-gray-200 rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 flex items-center gap-2 shadow-sm cursor-pointer hover:border-gray-300">
-            <span>Este Mês</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-        </div>
+
+        {% include "includes/month_year.html" %}
     </div>
     
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
