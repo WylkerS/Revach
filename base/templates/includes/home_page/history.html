@@ -1,0 +1,33 @@
+<div class="lg:col-span-1 bg-white p-6 rounded-lg border border-gray-100 shadow-sm">
+    <h3 class="text-lg font-serif font-bold text-slate-800 mb-4">Minhas Contas</h3>
+    <div class="space-y-4">
+        {% for transacao in transacoes %}
+        <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-md transition border border-transparent hover:border-gray-100 cursor-pointer">
+            <div class="flex items-center gap-3">
+                <div>
+                    <p class="text-sm font-bold text-slate-800">{{ transacao.nome|capfirst }}</p>
+                    <p class="text-xs text-slate-500">{{ transacao.categoria|capfirst }}</p>
+                </div>
+            </div>
+            <span class="text-sm font-medium text-slate-700">R$ {{ transacao.valor }} 
+                {% if transacao.tipo == 'Parcelada' %}
+                - {{ transacao.parcela_atual }}/{{ transacao.total_parcelas }} {% endif %}</span>
+        </div>
+        {% empty %}
+        <div class="flex items-center justify-between p-3 border-b border-gray-50">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-bold">NU</div>
+                <div>
+                    <p class="text-sm font-bold text-slate-800">Nubank</p>
+                    <p class="text-xs text-slate-500">Corrente</p>
+                </div>
+            </div>
+            <span class="text-sm font-medium text-slate-700">R$ 12.450,00</span>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <button class="w-full mt-6 py-2 border border-dashed border-gray-300 text-slate-500 text-sm font-medium rounded hover:bg-gray-50 hover:border-gray-400 transition">
+        + Adicionar Conta
+    </button>
+</div>
