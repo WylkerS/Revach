@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "corsheaders",
     'tailwind',
     'theme',
+    "django_htmx",
     
     'core',
     'base',
@@ -67,6 +68,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'requestlogs.middleware.RequestLogsMiddleware',
     'django_session_timeout.middleware.SessionTimeoutMiddleware',
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 REST_FRAMEWORK={

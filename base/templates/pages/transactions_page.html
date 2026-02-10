@@ -14,8 +14,8 @@
                 Gerencie todas as suas entradas e saídas financeiras.
             </p>
         </div>
-        <div class="mt-4 flex md:mt-0 md:ml-4">
-            <a href="#" class="inline-flex items-center px-6 py-3 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 focus:outline-none transition duration-200">
+        <div class="mt-4 flex md:mt-0 md:ml-4 cursor-pointer">
+            <a hx-get="{% url 'create_transaction' %}" hx-trigger="click" hx-target="#modal_create_transaction" class=" inline-flex items-center px-6 py-3 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 focus:outline-none transition duration-200">
                 <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -59,40 +59,40 @@
                     <tr class="hover:bg-slate-50 transition duration-150">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <div class="shrink-0 h-10 w-10 flex items-center justify-center rounded-full {% if transacao.tipo == 'entrada' %}bg-emerald-100 text-emerald-600{% else %}bg-rose-100 text-rose-600{% endif %}">
-                                    {% if transacao.tipo == 'entrada' %}
+                                <div class="shrink-0 h-10 w-10 flex items-center justify-center rounded-full {% if transacao.categoria.entrada %}bg-emerald-100 text-emerald-600{% else %}bg-rose-100 text-rose-600{% endif %}">
+                                    {% if transacao.categoria.entrada  %}
                                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" /></svg>
                                     {% else %}
                                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" /></svg>
                                     {% endif %}
                                 </div>
                                 <div class="ml-4">
-                                    <div class="text-sm font-bold text-slate-900">{{ transacao.descricao }}</div>
-                                    <div class="text-xs text-slate-500">{{ transacao.conta }}</div>
+                                    <div class="text-sm font-bold text-slate-900">{{ transacao.nome }}</div>
+                                    <div class="text-xs text-slate-500">{{ transacao.descricao|truncatechars:20 }}</div>
                                 </div>
                             </div>
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-slate-100 text-slate-800">
-                                {{ transacao.categoria }}
+                                {{ transacao.categoria|capfirst }}
                             </span>
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                            {{ transacao.data }}
+                            {{ transacao.data_lancamento|date:"F Y"|title }}
                         </td>
 
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold {% if transacao.tipo == 'entrada' %}text-emerald-600{% else %}text-rose-600{% endif %}">
-                            {% if transacao.tipo == 'entrada' %}+{% else %}-{% endif %} R$ {{ transacao.valor }}
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold {% if transacao.categoria.entrada %}text-emerald-600{% else %}text-rose-600{% endif %}">
+                            {% if transacao.categoria.entrada %}+{% else %}-{% endif %} R$ {{ transacao.valor }}
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap">
-                            {% if transacao.pago %}
+                            {% if transacao.situacao == "PAGA" %}
                                 <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                     <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span> Pago
                                 </span>
-                            {% else %}
+                            {% elif transacao.situacao == "PENDENTE" %}
                                 <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                                     <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span> Pendente
                                 </span>
@@ -135,5 +135,8 @@
             </div>
         </div>
     </div>
+</div>
+<div id="modal_create_transaction">
+
 </div>
 {% endblock %}
