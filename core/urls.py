@@ -14,7 +14,7 @@ urlpatterns = [
 
 htmx_urlpatterns = [
     path('create-transaction/', transactions_create, name="create_transaction"),
-    path('transactions-tipo/', transactions_tipo, name="transactions_tipo")
+    path('transactions-tipo/', transactions_tipo, name="transactions_tipo"),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) # Adicionar Isto

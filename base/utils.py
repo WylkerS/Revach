@@ -26,6 +26,8 @@ def get_data_navegacao(request):
         mes_prox = data_referencia.month + 1
         ano_prox = data_referencia.year
 
+    print(f'Data alterada para: {data_referencia}')
+    
     return {
         'data_referencia': data_referencia,
         'navegacao': {                      

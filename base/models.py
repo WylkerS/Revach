@@ -20,8 +20,8 @@ class Categoria(models.Model):
 
 class Transacao(models.Model):
     class TipoTransacao(models.TextChoices):
-        FIXA = "Fixa", _("Fixa")
         UNICA = "Única", _("Única")
+        FIXA = "Fixa", _("Fixa")
         PARCELADA = "Parcelada", _("Parcelada")
 
     class Situacao(models.TextChoices):

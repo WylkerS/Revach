@@ -15,7 +15,7 @@
             </p>
         </div>
         <div class="mt-4 flex md:mt-0 md:ml-4 cursor-pointer">
-            <a hx-get="{% url 'create_transaction' %}" hx-trigger="click" hx-target="#modal_create_transaction" class=" inline-flex items-center px-6 py-3 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 focus:outline-none transition duration-200">
+            <a hx-get="{% url 'create_transaction' %}?mes={{ mes_atual }}&ano={{ ano_atual }}" hx-trigger="click" hx-target="#modal_create_transaction" class=" inline-flex items-center px-6 py-3 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 focus:outline-none transition duration-200">
                 <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
