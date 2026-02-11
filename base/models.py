@@ -53,10 +53,10 @@ class Transacao(models.Model):
 
     identificador_transacao = models.UUIDField(default=uuid.uuid4, editable=False)
     
-    data_criacao = models.DateField("Data de Criação")
+    data_criacao = models.DateTimeField("Data de Criação", auto_now_add=True)
 
     class Meta:
-        ordering = ["-data_vencimento"]
+        ordering = ["-data_criacao"]
 
     def __str__(self):
         return f"{self.nome} - {self.valor} - {self.data_vencimento}"
@@ -72,7 +72,6 @@ class Transacao(models.Model):
         instance = cls(**kwargs)
         instance.data_lancamento = date(ano, mes, 1)
         instance.data_vencimento = date(ano, mes, 1)
-        instance.data_criacao = date(ano, mes, 1)
         instance.parcela_atual = 1
         instance.identificador_transacao = uuid.uuid4()
         instance.save()
@@ -93,7 +92,6 @@ class Transacao(models.Model):
                     valor=instance.valor,
                     data_lancamento=instance.data_lancamento + relativedelta.relativedelta(months=parcela_num - 1),
                     data_vencimento=instance.data_vencimento + relativedelta.relativedelta(months=parcela_num - 1),
-                    data_criacao=instance.data_criacao,
                     tipo=instance.tipo,
                     situacao=instance.situacao,
                     parcela_atual=parcela_num,

@@ -13,17 +13,6 @@
                 {% if transacao.tipo == 'Parcelada' %}
                 - {{ transacao.parcela_atual }}/{{ transacao.total_parcelas }} {% endif %}</span>
         </div>
-        {% empty %}
-        <div class="flex items-center justify-between p-3 border-b border-gray-50">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs font-bold">NU</div>
-                <div>
-                    <p class="text-sm font-bold text-slate-800">Nubank</p>
-                    <p class="text-xs text-slate-500">Corrente</p>
-                </div>
-            </div>
-            <span class="text-sm font-medium text-slate-700">R$ 12.450,00</span>
-        </div>
         {% endfor %}
     </div>
     
