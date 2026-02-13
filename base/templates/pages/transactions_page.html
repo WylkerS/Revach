@@ -92,18 +92,27 @@
         modal.classList.add('hidden')
     }
 
-    function toggleParcelas() {
+     function toggleParcelas() {
         const tipoSelect = document.getElementById('tipo')
         const parcelasDiv = document.getElementById('parcelas')
 
-        if (tipoSelect.value === 'Parcelada') {
-            console.log("É parcelada")
+        if (tipoSelect.value == "Parcelada") {
             parcelasDiv.classList.remove('hidden')
         } else {
-            console.log("Não é parcelada")
             parcelasDiv.classList.add('hidden')
+            parcelasDiv.querySelectorAll('input').forEach(input => input.value = 1)
         }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const tipoSelect = document.getElementById('tipo')
+        if (tipoSelect) {
+            tipoSelect.addEventListener('change', toggleParcelas)
+        }
+
+        toggleParcelas()
+    })
+
 
     const modal = {{ open_modal|yesno:"true,false" }};
 

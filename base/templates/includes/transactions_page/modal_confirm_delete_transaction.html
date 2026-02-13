@@ -55,7 +55,7 @@
                     Cancelar
                 </button>
                 
-                <button hx-post="{% url 'delete_transaction' transacao.id %}" hx-target="#lista_transacoes" hx-swap="innerHTML" class="w-full px-5 py-3 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors cursor-pointer">
+                <button hx-post="{% url 'delete_transaction' transacao.id %}?mes_atual={{ mes_atual }}&ano_atual={{ ano_atual }}" hx-target="#lista_transacoes" hx-swap="innerHTML" class="w-full px-5 py-3 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors cursor-pointer">
                     Sim, Excluir
                 </button>
             </div>

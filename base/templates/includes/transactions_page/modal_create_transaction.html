@@ -10,7 +10,7 @@
                     {{ mes_atual }}/{{ ano_atual }}
                 </p>
             </div>
-            <form action="{% url 'create_transaction' %}?ano={{ ano_atual }}&mes={{ mes_atual }}" method="POST">
+            <form action="{% url 'create_transaction' %}?ano_atual={{ ano_atual }}&mes_atual={{ mes_atual }}" method="POST">
                 {% csrf_token %}
                 
                 {% if form.non_field_errors %}
@@ -64,7 +64,6 @@
                         <label for="{{ form.tipo.id_for_label }}" class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{{ form.tipo.label }}</label>
 
                         <select onchange="toggleParcelas()" name="{{ form.tipo.name }}" id="tipo" class="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-gray-50">
-                            <option value="" disabled selected></option>
                             {% for tipo in tipos %}
                                 <option value="{{ tipo }}" {% if form.tipo.value == tipo %}selected{% endif %}>{{ tipo }}</option>
                             {% endfor %}
@@ -93,12 +92,12 @@
                 </div>
 
                 <div class="pt-6 border-t border-white/5 flex flex-col md:flex-row gap-4">
-                    <a href="{% url "transactions" %}" class="px-12 py-4 border border-white/10 text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em] hover:text-white hover:border-white/30 transition-all cursor-pointer">
+                    <a href="{% url "transactions" %}?mes_atual={{ mes_atual }}&ano_atual={{ ano_atual }}" class="px-12 py-4 border border-white/10 text-gray-200 font-bold text-[10px] uppercase tracking-[0.3em] hover:text-white hover:border-white/30 transition-all cursor-pointer flex items-center">
                         Cancelar
                     </a>
                     
                     <button type="submit" class="relative px-12 py-4 bg-white text-black text-[10px] font-bold uppercase tracking-[0.3em] hover:bg-teal-400 transition-all duration-500 group overflow-hidden cursor-pointer">
-                        <span class="relative z-10">Confirmar Registro</span>
+                        <span class="relative z-10">Criar Transação</span>
                         <div class="absolute inset-0 bg-teal-400 translate-y-full transition-transform duration-500"></div>
                     </button>
                 </div>

@@ -20,12 +20,11 @@ def delete_transaction(request, pk):
         info_data = get_data_navegacao(request)
         data_ref = info_data["data_referencia"]
         transacoes = Transacao.objects.filter(data_lancamento=data_ref)[:5]
-        
-        lista = render(request, "partials/htmx_components/list_transactions.html", {"transacoes": transacoes}).content.decode('utf-8')
+        mes_atual = request.GET.get('mes_atual')
+        ano_atual = request.GET.get('ano_atual')
+
+        lista = render(request, "partials/htmx_components/list_transactions.html", {"transacoes": transacoes, 'mes_atual': mes_atual, 'ano_atual': ano_atual}).content.decode('utf-8')
 
         fechar_modal = '<div id="modal_delete" hx-swap-oob="innerHTML"></div>'
         
         return HttpResponse(lista + fechar_modal)
-
-
-    return render(request, 'partials/htmx_components/modal_confirm_delete_transaction.html', {'transacao': transacao})

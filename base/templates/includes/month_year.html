@@ -1,5 +1,5 @@
 <div class="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm p-1">
-    <a href="?mes={{ mes_ant }}&ano={{ ano_ant }}" class="p-2 hover:bg-slate-50 rounded-md text-slate-500 transition-colors cursor-pointer">
+    <a href="?mes_atual={{ mes_ant }}&ano_atual={{ ano_ant }}" class="p-2 hover:bg-slate-50 rounded-md text-slate-500 transition-colors cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
@@ -9,7 +9,7 @@
         {{ data_referencia|date:"F Y"|title }}
     </span>
 
-    <a href="?mes={{ mes_prox }}&ano={{ ano_prox }}" class="p-2 hover:bg-slate-50 rounded-md text-slate-500 transition-colors cursor-pointer">
+    <a href="?mes_atual={{ mes_prox }}&ano_atual={{ ano_prox }}" class="p-2 hover:bg-slate-50 rounded-md text-slate-500 transition-colors cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>

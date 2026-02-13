@@ -59,23 +59,24 @@ def transactions_page(request):
 def create_transaction(request):
     if request.method == 'POST':
         
-        ano = request.GET.get('ano')
-        mes = request.GET.get('mes')
+        ano = request.GET.get('ano_atual')
+        mes = request.GET.get('mes_atual')
         
         form = TransacaoForm(request.POST)
-        
+            
         if form.is_valid():
             transacao = form
-
+            
             if transacao.cleaned_data['tipo'] == "Única" or transacao.cleaned_data['tipo'] == "Fixa":
-                transacao.total_parcelas = 1
+                transacao.cleaned_data['total_parcelas'] = 1
 
-            elif transacao.cleaned_data['tipo'] == "Parcelada" and transacao.cleaned_data['total_parcelas'] is None:
+            if transacao.cleaned_data['tipo'] == "Parcelada" and transacao.cleaned_data['total_parcelas'] < 2:
+                form.add_error("total_parcelas", "Total de parcelas deve ser maior ou igual a 2 para transações parceladas.")
                 return render(request, 'pages/transactions_page.html', {'form': form})
             
             transacao.save(mes=mes, ano=ano)
-            return redirect(f"/transactions/?mes={mes}&ano={ano}")
-        
+            return redirect(f"/transactions/?mes_atual={mes}&ano_atual={ano}")
+
         categorias = Categoria.objects.all()
         tipos = Transacao.TipoTransacao.values
         info_data = get_data_navegacao(request)
@@ -90,8 +91,8 @@ def create_transaction(request):
             "tipos": tipos,
             "form": form,
             "open_modal": True,
-            "mes": mes,
-            "ano": ano,
+            "mes_atual": mes,
+            "ano_atual": ano,
         }
         return render(request, "pages/transactions_page.html", context)
                 

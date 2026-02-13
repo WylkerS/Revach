@@ -4,8 +4,8 @@ def get_data_navegacao(request):
     hoje = date.today()
     
     try:
-        mes_atual = int(request.GET.get('mes', hoje.month))
-        ano_atual = int(request.GET.get('ano', hoje.year))
+        mes_atual = int(request.GET.get('mes_atual', hoje.month))
+        ano_atual = int(request.GET.get('ano_atual', hoje.year))
         data_referencia = date(ano_atual, mes_atual, 1)
     except (ValueError, TypeError):
         data_referencia = date(hoje.year, hoje.month, 1)
