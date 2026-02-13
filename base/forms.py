@@ -5,7 +5,7 @@ class TransacaoForm(forms.ModelForm):
   
     class Meta:
         model = Transacao
-        fields = ['nome', 'valor', 'categoria', 'tipo', 'total_parcelas']
+        fields = ['nome', 'valor', 'categoria', 'tipo', 'total_parcelas', 'descricao']
         
     def save(self, commit=True, mes=None, ano=None):
         data = self.cleaned_data

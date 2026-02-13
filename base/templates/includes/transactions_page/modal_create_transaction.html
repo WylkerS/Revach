@@ -1,0 +1,109 @@
+<div id="modal-create-transaction" class="hidden modal-animate-fade fixed inset-0 bg-transparent bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center backdrop-blur-sm">
+
+    <div class="w-full max-w-lg bg-[#0f0f0f] border border-white/5 relative overflow-hidden group">
+
+        <div class="p-8 md:p-12 text-center space-y-8">
+
+            <div class="space-y-2">
+                <h1 class="text-2xl font-bold text-white uppercase tracking-tight">Criar Transação</h1>
+                <p class="text-gray-500 text-xs uppercase tracking-[0.15em] leading-relaxed">
+                    {{ mes_atual }}/{{ ano_atual }}
+                </p>
+            </div>
+            <form action="{% url 'create_transaction' %}?ano={{ ano_atual }}&mes={{ mes_atual }}" method="POST">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="p-4 bg-red-500/10 border border-red-500/50 text-red-400 text-xs font-bold uppercase tracking-wider rounded">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    
+                    <div class="space-y-2 col-span-2">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]" for="{{ form.nome.id_for_label }}">{{ form.nome.label }}</label>
+
+                        <input type="text" name="{{ form.nome.name }}" id="{{ form.nome.id_for_label }}" value="{{ form.nome.value|default_if_none:'' }}" class="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-gray-50" placeholder="Ex: Salário, Aluguel, etc.">
+                        
+                        {% if form.nome.errors %}
+                            <div class="text-red-500 text-[10px] uppercase tracking-wider font-bold mt-1 pl-1">
+                                {{ form.nome.errors.0 }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]" for="{{ form.valor.id_for_label }}">{{ form.valor.label }}</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-gray-50 w-5">R$</span>
+
+                            <input type="number" name="{{ form.valor.name }}" id="{{ form.valor.id_for_label }}" value="{{ form.valor.value|default_if_none:'' }}" class="w-full pl-10 pr-4 py-2 bg-gray-900 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-gray-50" placeholder="  1500,00">
+                            
+                        </div>
+                        {% if form.valor.errors %}
+                            <div class="text-red-500 text-[10px] uppercase tracking-wider font-bold mt-1 pl-1">
+                                {{ form.valor.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]" for="{{ form.categoria.id_for_label }}">{{ form.categoria.label }}</label>
+                        <select name="{{ form.categoria.name }}" id="{{ form.categoria.id_for_label }}" class="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-gray-50">
+                            {% for categoria in categorias %}
+                                <option value="{{ categoria.id }}" {% if form.categoria.value == categoria.id %}selected{% endif %}>{{ categoria.nome|capfirst }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="{{ form.tipo.id_for_label }}" class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{{ form.tipo.label }}</label>
+
+                        <select onchange="toggleParcelas()" name="{{ form.tipo.name }}" id="tipo" class="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-gray-50">
+                            <option value="" disabled selected></option>
+                            {% for tipo in tipos %}
+                                <option value="{{ tipo }}" {% if form.tipo.value == tipo %}selected{% endif %}>{{ tipo }}</option>
+                            {% endfor %}
+                        </select>
+
+                        {% if form.tipo.errors %}
+                            <div class="text-red-500 text-[10px] uppercase tracking-wider font-bold mt-1 pl-1">
+                                {{ form.tipo.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div id="parcelas" class="hidden space-y-2 opacity-100 transition-all duration-500">
+                        {% include "includes/transactions_page/parcelada_fields.html" %}
+                    </div>
+
+                    <div class="space-y-2 col-span-2">
+                        <label for="{{ form.descricao.id_for_label }}" class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">{{ form.descricao.label }}</label>
+                        <input type="text" name="{{ form.descricao.name }}" id="{{ form.descricao.id_for_label }}" value="{{ form.descricao.value|default_if_none:'' }}" class="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-gray-50" placeholder="Ex: Compra de supermercado, etc.">
+                    </div>
+                    {% if form.descricao.errors %}
+                        <div class="text-red-500 text-[10px] uppercase tracking-wider font-bold mt-1 pl-1">
+                            {{ form.descricao.errors.0 }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="pt-6 border-t border-white/5 flex flex-col md:flex-row gap-4">
+                    <a href="{% url "transactions" %}" class="px-12 py-4 border border-white/10 text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em] hover:text-white hover:border-white/30 transition-all cursor-pointer">
+                        Cancelar
+                    </a>
+                    
+                    <button type="submit" class="relative px-12 py-4 bg-white text-black text-[10px] font-bold uppercase tracking-[0.3em] hover:bg-teal-400 transition-all duration-500 group overflow-hidden cursor-pointer">
+                        <span class="relative z-10">Confirmar Registro</span>
+                        <div class="absolute inset-0 bg-teal-400 translate-y-full transition-transform duration-500"></div>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

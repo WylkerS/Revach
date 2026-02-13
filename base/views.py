@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Transacao
+from .models import Transacao, Categoria
 from .utils import get_data_navegacao
 from .forms import TransacaoForm
-
 
 def home_page(request):
     
@@ -33,44 +32,69 @@ def home_page(request):
 
     return render(request, 'pages/home_page.html', context)
 
-def transactions_page(request): 
-    
-    if request.method == 'POST':
-        print("Criando")
-        
-        form = TransacaoForm(request.POST)
-        mes = request.GET.get('mes')
-        ano = request.GET.get('ano')
-        print(f"Ano: {ano}, Mês: {mes}")
-
-        if form.is_valid():
-            if form.cleaned_data['tipo'] == 'Fixa' or form.cleaned_data['tipo'] == "Única":
-                form.cleaned_data['total_parcelas'] = 1
-                print('Transação do tipo Fixa ou Única, definindo total_parcelas como 1.')
-            else:
-                print('Transação do tipo Parcelada')
-                if not form.cleaned_data['total_parcelas']:
-                     form.add_error('total_parcelas', 'Este campo é obrigatório para transações parceladas.')
-                     print('Erro: total_parcelas é obrigatório para transações parceladas.')
-                
-            form.save(mes=mes, ano=ano)
-            return redirect(f'/transactions/?mes={mes}&ano={ano}')
-            
-        else:
-            print("Erro ao salvar transação:", form.errors)
-
+def transactions_page(request):
     info_data = get_data_navegacao(request)
     data_ref = info_data['data_referencia']
+    
+    form = TransacaoForm()
+    categorias = Categoria.objects.all()
+    tipos = Transacao.TipoTransacao.values
+    
     transacoes = Transacao.objects.filter(data_lancamento=data_ref)[:5]
-
+    
     context = {
+        'transacoes': transacoes,
+        
         **info_data['navegacao'],
         'data_referencia': data_ref,
-        'transacoes': transacoes,
+        
+        'form': form,
+        'categorias': categorias,
+        'tipos': tipos,
+        
     }
-    
+
     return render(request, 'pages/transactions_page.html', context)
 
+def create_transaction(request):
+    if request.method == 'POST':
+        
+        ano = request.GET.get('ano')
+        mes = request.GET.get('mes')
+        
+        form = TransacaoForm(request.POST)
+        
+        if form.is_valid():
+            transacao = form
+
+            if transacao.cleaned_data['tipo'] == "Única" or transacao.cleaned_data['tipo'] == "Fixa":
+                transacao.total_parcelas = 1
+
+            elif transacao.cleaned_data['tipo'] == "Parcelada" and transacao.cleaned_data['total_parcelas'] is None:
+                return render(request, 'pages/transactions_page.html', {'form': form})
+            
+            transacao.save(mes=mes, ano=ano)
+            return redirect(f"/transactions/?mes={mes}&ano={ano}")
+        
+        categorias = Categoria.objects.all()
+        tipos = Transacao.TipoTransacao.values
+        info_data = get_data_navegacao(request)
+        data_ref = info_data["data_referencia"]
+        transacoes = Transacao.objects.filter(data_lancamento=data_ref)[:5]
+
+        context = {
+            **info_data["navegacao"],
+            "data_referencia": data_ref,
+            "transacoes": transacoes,
+            "categorias": categorias,
+            "tipos": tipos,
+            "form": form,
+            "open_modal": True,
+            "mes": mes,
+            "ano": ano,
+        }
+        return render(request, "pages/transactions_page.html", context)
+                
 def categories_page(request):
     return render(request, 'pages/categories_page.html')
 
